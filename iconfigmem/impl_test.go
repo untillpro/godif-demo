@@ -10,12 +10,14 @@ package iconfigmem
 import (
 	"testing"
 
+	"github.com/stretchr/testify/require"
 	"github.com/untillpro/godif-demo/iconfig"
 )
 
 func Test_Impl(t *testing.T) {
-	ctx := start(t)
+	ctx, err := start(t)
 	defer stop(ctx, t)
+	require.Nil(t, err, err)
 
 	iconfig.TestImpl(ctx, t)
 }

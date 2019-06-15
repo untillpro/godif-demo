@@ -8,3 +8,5 @@ require (
 	github.com/untillpro/gochips v1.9.0
 	github.com/untillpro/godif v0.10.0
 )
+
+replace github.com/untillpro/godif => ../godif

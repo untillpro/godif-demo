@@ -19,41 +19,23 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"github.com/untillpro/godif"
 	"github.com/untillpro/godif/iservices"
 	"github.com/untillpro/godif/services"
 	"github.com/untillpro/godif-demo/iconfig"
 )
 
 func Test_StartStop(t *testing.T) {
-	ctx := start(t)
+	ctx, err := start(t)
 	defer stop(ctx, t)
+	require.Nil(t, err, err)
 
 	log.Println("### Service:", *getService(ctx))
 }
 
-func start(t *testing.T) context.Context {
-
-	// Require/provide iservices interface
-
-	godif.Require(&iservices.Start)
-	services.Declare()
-
-	// Declare test requirements
-	iconfig.DeclareTest()
-
-	// Declare own service
-	Declare()
-
-	errs := godif.ResolveAll()
-	require.True(t, len(errs) == 0, "Resolve problem", errs)
-
-	ctx, err := iservices.Start(context.Background())
-	require.Nil(t, err)
-	return ctx
+func start(t *testing.T) (context.Context, error) {
+	return iservices.StartInTest(t, services.Declare, iconfig.DeclareTest, Declare)
 }
 
 func stop(ctx context.Context, t *testing.T) {
-	iservices.Stop(ctx)
-	godif.Reset()
+	iservices.StopInTest(ctx, t)
 }

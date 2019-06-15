@@ -15,10 +15,16 @@ import (
 
 // Declare s.e.
 func Declare() {
+
+	// Functions
+
+	godif.Provide(&iconfig.GetConfig, getConfig)
+	godif.Provide(&iconfig.PutConfig, putConfig)
+
+	// Service 
 	var service Service
 	service.configs = make(map[string][]byte)
 	godif.ProvideSliceElement(&iservices.Services, &service)
 
-	godif.Provide(&iconfig.GetConfig, getConfig)
-	godif.Provide(&iconfig.PutConfig, putConfig)
+
 }

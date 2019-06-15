@@ -24,12 +24,12 @@ func getService(ctx context.Context) *Service {
 	return ctx.Value(contextKey).(*Service)
 }
 
-// Start s.e.
+// Start service
 func (s *Service) Start(ctx context.Context) (context.Context, error) {
 	return context.WithValue(ctx, contextKey, s), nil
 }
 
-// Stop s.e.
+// Stop service
 func (s *Service) Stop(ctx context.Context) {
 
 }

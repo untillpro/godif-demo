@@ -15,7 +15,14 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/require"
+	"github.com/untillpro/godif"
 )
+
+// DeclareTest s.e.
+func DeclareTest() {
+	godif.Require(&GetConfig)
+	godif.Require(&PutConfig)
+}
 
 const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -56,6 +63,7 @@ func randStringBytes(n int) string {
 
 // TestImpl tests iconfig implementation
 func TestImpl(actx context.Context, t *testing.T) {
+
 	ctx = actx
 	t.Run("testPutGet", testPutGet)
 	t.Run("testNilConfig", testNilConfig)

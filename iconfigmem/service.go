@@ -11,6 +11,11 @@ import (
 	"context"
 )
 
+// Service s.e.
+type Service struct {
+	configs map[string][]byte
+}
+
 type contextKeyType string
 
 const contextKey = contextKeyType("contextKey")

@@ -17,8 +17,5 @@ func Test_Impl(t *testing.T) {
 	ctx := start(t)
 	defer stop(ctx, t)
 
-	// require.True(t, implFunc(ctx))
-
 	iconfig.TestImpl(ctx, t)
-
 }

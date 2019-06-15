@@ -22,6 +22,7 @@ import (
 	"github.com/untillpro/godif"
 	"github.com/untillpro/godif/iservices"
 	"github.com/untillpro/godif/services"
+	"github.com/untillpro/godif-demo/iconfig"
 )
 
 func Test_StartStop(t *testing.T) {
@@ -29,16 +30,17 @@ func Test_StartStop(t *testing.T) {
 	defer stop(ctx, t)
 
 	log.Println("### Service:", *getService(ctx))
-
-	/*
-		Your tests here
-	*/
 }
 
 func start(t *testing.T) context.Context {
 
-	// Provide iservices interface
-	services.DeclareRequire()
+	// Require/provide iservices interface
+
+	godif.Require(&iservices.Start)
+	services.Declare()
+
+	// Declare test requirements
+	iconfig.DeclareTest()
 
 	// Declare own service
 	Declare()

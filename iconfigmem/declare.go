@@ -10,17 +10,15 @@ package iconfigmem
 import (
 	"github.com/untillpro/godif"
 	"github.com/untillpro/godif/iservices"
+	"github.com/untillpro/godif-demo/iconfig"
 )
-
-// Service s.e.
-type Service struct {
-	storage map[string]interface{}
-}
 
 // Declare s.e.
 func Declare() {
 	var service Service
+	service.configs = make(map[string][]byte)
 	godif.ProvideSliceElement(&iservices.Services, &service)
 
-	//godif.Provide(&???.???, implFunc)
+	godif.Provide(&iconfig.GetConfig, getConfig)
+	godif.Provide(&iconfig.PutConfig, putConfig)
 }

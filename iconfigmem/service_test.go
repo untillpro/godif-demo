@@ -18,10 +18,10 @@ import (
 	"log"
 	"testing"
 
-	"github.com/stretchr/testify/require"
-	"github.com/untillpro/godif/iservices"
-	"github.com/untillpro/godif/services"
 	"github.com/untillpro/godif-demo/iconfig"
+
+	"github.com/stretchr/testify/require"
+	"github.com/untillpro/godif/services"
 )
 
 func Test_StartStop(t *testing.T) {
@@ -33,9 +33,11 @@ func Test_StartStop(t *testing.T) {
 }
 
 func start(t *testing.T) (context.Context, error) {
-	return iservices.StartInTest(t, services.Declare, iconfig.DeclareTest, Declare)
+	Declare()
+	iconfig.DeclareForTest()
+	return services.ResolveAndStart()
 }
 
 func stop(ctx context.Context, t *testing.T) {
-	iservices.StopInTest(ctx, t)
+	services.StopAndReset(ctx)
 }

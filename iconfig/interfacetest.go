@@ -18,8 +18,8 @@ import (
 	"github.com/untillpro/godif"
 )
 
-// DeclareTest s.e.
-func DeclareTest() {
+// DeclareForTest s.e.
+func DeclareForTest() {
 	godif.Require(&GetConfig)
 	godif.Require(&PutConfig)
 }

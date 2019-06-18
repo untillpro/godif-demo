@@ -9,8 +9,8 @@ package iconfigmem
 
 import (
 	"github.com/untillpro/godif"
-	"github.com/untillpro/godif/iservices"
 	"github.com/untillpro/godif-demo/iconfig"
+	"github.com/untillpro/godif/services"
 )
 
 // Declare s.e.
@@ -21,10 +21,9 @@ func Declare() {
 	godif.Provide(&iconfig.GetConfig, getConfig)
 	godif.Provide(&iconfig.PutConfig, putConfig)
 
-	// Service 
+	// Service
 	var service Service
 	service.configs = make(map[string][]byte)
-	godif.ProvideSliceElement(&iservices.Services, &service)
-
+	godif.ProvideSliceElement(&services.Services, &service)
 
 }

@@ -9,7 +9,6 @@ package ikvdbmem
 
 import (
 	"context"
-	"time"
 
 	intf "github.com/untillpro/godif-demo/ikvdb"
 )
@@ -32,10 +31,7 @@ func get(ctx context.Context, key string) (values map[string]intf.Record, err er
 
 func put(ctx context.Context, key, value string) error {
 	data := getService(ctx).data
-	rec := data[key]
-	rec.Value = value
-	rec.Modified = time.Now()
-	data[key] = rec
+	data[key] = intf.NewRecord(value)
 	return nil
 }
 

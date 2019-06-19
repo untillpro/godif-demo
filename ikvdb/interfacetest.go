@@ -86,6 +86,7 @@ func testBasicUsage(t *testing.T) {
 	// Remove all values
 
 	err = Remove(ctx, "")
+	require.Nil(t, err)
 	records, err = Get(ctx, "")
 	require.Nil(t, err)
 	assert.Equal(t, 0, len(records))

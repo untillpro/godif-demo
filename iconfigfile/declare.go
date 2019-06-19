@@ -9,7 +9,7 @@ package iconfigfile
 
 import (
 	"github.com/untillpro/godif"
-	"github.com/untillpro/godif-demo/iconfig"
+	intf "github.com/untillpro/godif-demo/iconfig"
 	"github.com/untillpro/godif/services"
 )
 
@@ -18,8 +18,8 @@ func Declare(configFolder string) {
 
 	// Functions
 
-	godif.Provide(&iconfig.GetConfig, getConfig)
-	godif.Provide(&iconfig.PutConfig, putConfig)
+	godif.Provide(&intf.GetConfig, getConfig)
+	godif.Provide(&intf.PutConfig, putConfig)
 
 	service.configFolder = configFolder
 	godif.ProvideSliceElement(&services.Services, &service)

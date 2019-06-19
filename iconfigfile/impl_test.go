@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"github.com/untillpro/godif-demo/iconfig"
+	intf "github.com/untillpro/godif-demo/iconfig"
 )
 
 func Test_Impl(t *testing.T) {
@@ -19,5 +19,5 @@ func Test_Impl(t *testing.T) {
 	defer tearDown(ctx, t)
 	require.Nil(t, err, err)
 
-	iconfig.TestImpl(ctx, t)
+	intf.TestImpl(ctx, t)
 }

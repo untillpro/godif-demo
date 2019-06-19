@@ -38,6 +38,9 @@ func Test_Service(t *testing.T) {
 var tempFolder string
 
 func setUp(t *testing.T) (context.Context, error) {
+
+	services.Services = []services.IService{}
+
 	var err error
 	tempFolder, err = ioutil.TempDir("", "ikvdbbbolt")
 	if nil != err {

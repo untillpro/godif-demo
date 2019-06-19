@@ -14,3 +14,8 @@ type Record struct {
 	Value    string
 	Modified time.Time
 }
+
+// NewRecord constructs new record from value and current time
+func NewRecord(value string) Record {
+	return Record{value, time.Now()}
+}

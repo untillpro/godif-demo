@@ -11,16 +11,17 @@
 
 */
 
-package iconfigfile
+package ikvdbbbolt
 
 import (
 	"context"
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
 	"testing"
 
-	intf "github.com/untillpro/godif-demo/iconfig"
+	intf "github.com/untillpro/godif-demo/ikvdb"
 
 	"github.com/stretchr/testify/require"
 	"github.com/untillpro/godif/services"
@@ -31,18 +32,18 @@ func Test_StartStop(t *testing.T) {
 	defer tearDown(ctx, t)
 	require.Nil(t, err, err)
 
-	log.Println("### Service:", service)
+	log.Println("### Service:", *getService(ctx))
 }
 
 var tempFolder string
 
 func setUp(t *testing.T) (context.Context, error) {
 	var err error
-	tempFolder, err = ioutil.TempDir("", "iconfigmem")
+	tempFolder, err = ioutil.TempDir("", "ikvdbbbolt")
 	if nil != err {
 		return nil, err
 	}
-	Declare(tempFolder)
+	Declare(path.Join(tempFolder, "my.db"))
 	intf.DeclareForTest()
 	return services.ResolveAndStart()
 }

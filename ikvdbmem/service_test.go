@@ -25,19 +25,19 @@ import (
 )
 
 func Test_StartStop(t *testing.T) {
-	ctx, err := start(t)
-	defer stop(ctx, t)
+	ctx, err := setUp(t)
+	defer tearDown(ctx, t)
 	require.Nil(t, err, err)
 
 	log.Println("### Service:", *getService(ctx))
 }
 
-func start(t *testing.T) (context.Context, error) {
+func setUp(t *testing.T) (context.Context, error) {
 	Declare()
 	intf.DeclareForTest()
 	return services.ResolveAndStart()
 }
 
-func stop(ctx context.Context, t *testing.T) {
+func tearDown(ctx context.Context, t *testing.T) {
 	services.StopAndReset(ctx)
 }

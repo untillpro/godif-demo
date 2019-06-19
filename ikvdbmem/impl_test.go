@@ -15,8 +15,8 @@ import (
 )
 
 func Test_Impl(t *testing.T) {
-	ctx, err := start(t)
-	defer stop(ctx, t)
+	ctx, err := setUp(t)
+	defer tearDown(ctx, t)
 	require.Nil(t, err, err)
 
 	intf.TestImpl(ctx, t)

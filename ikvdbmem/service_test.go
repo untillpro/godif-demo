@@ -24,7 +24,7 @@ import (
 	"github.com/untillpro/godif/services"
 )
 
-func Test_StartStop(t *testing.T) {
+func Test_Service(t *testing.T) {
 	ctx, err := setUp(t)
 	defer tearDown(ctx, t)
 	require.Nil(t, err, err)

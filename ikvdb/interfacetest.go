@@ -10,6 +10,7 @@ package ikvdb
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -28,6 +29,7 @@ var ctx context.Context
 func TestImpl(actx context.Context, t *testing.T) {
 	ctx = actx
 	t.Run("testBasicUsage", testBasicUsage)
+	t.Run("testModified", testModified)
 }
 
 func testBasicUsage(t *testing.T) {
@@ -44,49 +46,80 @@ func testBasicUsage(t *testing.T) {
 	err = Put(ctx, "k2", "v2")
 	require.Nil(t, err)
 	err = Put(ctx, "k3", "v3")
-	require.Nil(t, err)	
-
+	require.Nil(t, err)
 
 	// Get all values
 
-	var values map[string]string
-	values, err = Get(ctx, "")
+	var records map[string]Record
+	records, err = Get(ctx, "")
 	require.Nil(t, err)
-	assert.Equal(t, 3, len(values))
-	assert.Equal(t, "v1", values["k1"])
-	assert.Equal(t, "v2", values["k2"])
-	assert.Equal(t, "v3", values["k3"])
+	assert.Equal(t, 3, len(records))
+	assert.Equal(t, "v1", records["k1"].Value)
+	assert.Equal(t, "v2", records["k2"].Value)
+	assert.Equal(t, "v3", records["k3"].Value)
 
 	// Get first value
 
-	values, err = Get(ctx, "k1")
+	records, err = Get(ctx, "k1")
 	require.Nil(t, err)
-	assert.Equal(t, 1, len(values))
-	assert.Equal(t, "v1", values["k1"])
+	assert.Equal(t, 1, len(records))
+	assert.Equal(t, "v1", records["k1"].Value)
 
 	// Get for non-existing key
 
-	values, err = Get(ctx, "k-1")
+	records, err = Get(ctx, "k-1")
 	require.Nil(t, err)
-	assert.Equal(t, 0, len(values))
+	assert.Equal(t, 0, len(records))
 
 	// Remove second value
 
-	err =  Remove(ctx, "k2")
+	err = Remove(ctx, "k2")
 
 	// Get all values, k2 should be deleted
 
-	values, err = Get(ctx, "")
+	records, err = Get(ctx, "")
 	require.Nil(t, err)
-	assert.Equal(t, 2, len(values))
-	assert.Equal(t, "v1", values["k1"])
-	assert.Equal(t, "v3", values["k3"])
+	assert.Equal(t, 2, len(records))
+	assert.Equal(t, "v1", records["k1"].Value)
+	assert.Equal(t, "v3", records["k3"].Value)
 
 	// Remove all values
 
-	err =  Remove(ctx, "")
-	values, err = Get(ctx, "")
+	err = Remove(ctx, "")
+	records, err = Get(ctx, "")
 	require.Nil(t, err)
-	assert.Equal(t, 0, len(values))
+	assert.Equal(t, 0, len(records))
+
+}
+
+func testModified(t *testing.T) {
+	var err error
+
+	// Remove all records
+	Remove(ctx, "")
+
+	// Put a record
+
+	err = Put(ctx, "k1", "v1")
+	require.Nil(t, err)
+
+	// Get record mod time
+
+	records, err := Get(ctx, "k1")
+	mod1 := records["k1"].Modified
+
+	// Sleep
+
+	time.Sleep(20 * time.Millisecond)
+
+	// Put record again
+
+	err = Put(ctx, "k1", "v2")
+	records, err = Get(ctx, "k1")
+	mod2 := records["k1"].Modified
+
+	// mod2 must be after mod1
+
+	require.True(t, mod2.After(mod1))
 
 }

@@ -11,15 +11,16 @@
 
 */
 
-package iconfigmem
+package ikvdbmem
 
 import (
 	"context"
 	"log"
 	"testing"
 
+	intf "github.com/untillpro/godif-demo/ikvdb"
+
 	"github.com/stretchr/testify/require"
-	intf "github.com/untillpro/godif-demo/iconfig"
 	"github.com/untillpro/godif/services"
 )
 

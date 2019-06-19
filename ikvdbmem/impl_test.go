@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-package iconfigmem
+package ikvdbmem
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	intf "github.com/untillpro/godif-demo/iconfig"
+	intf "github.com/untillpro/godif-demo/ikvdb"
 )
 
 func Test_Impl(t *testing.T) {

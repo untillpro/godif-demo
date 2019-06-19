@@ -10,7 +10,7 @@ package iconfig
 import "context"
 
 // GetConfig fills `config` parameter from persistent config with given name
-// If persistent config does not exist `config` parameter is left intact
+// If persistent config does not exist `config` parameter is left intact, nil is still returned
 var GetConfig func(ctx context.Context, configName string, config interface{}) error
 
 // PutConfig saves config with given name

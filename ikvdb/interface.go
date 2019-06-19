@@ -10,7 +10,7 @@ package ikvdb
 import "context"
 
 // Get returns all values if key is empty and value for given key otherwise
-var Get func(ctx context.Context, key string) (value map[string]string, err error)
+var Get func(ctx context.Context, key string) (records map[string]Record, err error)
 
 // Put s.e.
 var Put func(ctx context.Context, key, value string) error

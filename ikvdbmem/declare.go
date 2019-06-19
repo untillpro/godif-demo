@@ -5,11 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-package iconfigmem
+package ikvdbmem
 
 import (
 	"github.com/untillpro/godif"
-	intf "github.com/untillpro/godif-demo/iconfig"
+	"github.com/untillpro/godif-demo/ikvdb"
+	intf "github.com/untillpro/godif-demo/ikvdb"
 	"github.com/untillpro/godif/services"
 )
 
@@ -18,12 +19,13 @@ func Declare() {
 
 	// Functions
 
-	godif.Provide(&intf.GetConfig, getConfig)
-	godif.Provide(&intf.PutConfig, putConfig)
+	godif.Provide(&ikvdb.Get, get)
+	godif.Provide(&ikvdb.Put, put)
+	godif.Provide(&ikvdb.Remove, remove)
 
 	// Service
 	var service Service
-	service.configs = make(map[string][]byte)
+	service.data = make(map[string]intf.Record)
 	godif.ProvideSliceElement(&services.Services, &service)
 
 }

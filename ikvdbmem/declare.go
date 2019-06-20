@@ -9,7 +9,6 @@ package ikvdbmem
 
 import (
 	"github.com/untillpro/godif"
-	"github.com/untillpro/godif-demo/ikvdb"
 	intf "github.com/untillpro/godif-demo/ikvdb"
 	"github.com/untillpro/godif/services"
 )
@@ -19,9 +18,9 @@ func Declare() {
 
 	// Functions
 
-	godif.Provide(&ikvdb.Get, get)
-	godif.Provide(&ikvdb.Put, put)
-	godif.Provide(&ikvdb.Remove, remove)
+	godif.Provide(&intf.Get, get)
+	godif.Provide(&intf.Put, put)
+	godif.Provide(&intf.Remove, remove)
 
 	// Service
 	var service Service

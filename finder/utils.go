@@ -7,27 +7,36 @@
 
 package finder
 
-import (
-	"context"
-	"regexp"
+// Dimensions in string coord
+const Dimensions = 255
 
-	"github.com/untillpro/godif-demo/ikvdb"
-)
-
-// Find records which match `rex` using ikbdb.Get
-func Find(ctx context.Context, rex string) map[string]ikvdb.Record {
-	res := map[string]ikvdb.Record{}
-	re := regexp.MustCompile(rex)
-	recs, err := ikvdb.Get(ctx, "")
-	if err != nil {
-		return res
+// CalcStringCoords s.e.
+func CalcStringCoords(s string) (res []int) {
+	for i := 0; i < Dimensions; i++ {
+		res = append(res, 0)
 	}
 
-	for key, rec := range recs {
-		matches := re.FindStringSubmatch(rec.Value)
-		if len(matches) > 0 {
-			res[key] = rec
+	for _, char := range s {
+		dim := int(char) % Dimensions
+		if res[dim] == 0 {
+			res[dim] = 1
 		}
 	}
-	return res
+
+	return
+}
+
+// MatchAnswer to question
+func MatchAnswer(question, answer string) int {
+	coords1 := CalcStringCoords(question)
+	coords2 := CalcStringCoords(answer)
+
+	sum := 0
+	for i, c1 := range coords1 {
+		c2 := coords2[i]
+		if c1 > 0 {
+			sum += c1 - c2
+		}
+	}
+	return sum
 }

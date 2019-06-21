@@ -11,45 +11,17 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"github.com/untillpro/godif-demo/ikvdb"
 )
 
-func Test_BasicUsage(t *testing.T) {
-	ctx, err := setUp(t)
-	defer tearDown(ctx, t)
-	require.Nil(t, err, err)
+func checkFirstDistanceLess(t *testing.T, q, a1, a2 string) {
+	d1 := CalcDistanceBetween(q, a1)
+	d2 := CalcDistanceBetween(q, a2)
+	assert.True(t, d1 < d2, "%v, %v, %v: %d %d", q, a1, a2, d1, d2)
+}
 
-	// Empty db
-	{
-		retGetErr = nil
-		retGetRecords = map[string]ikvdb.Record{}
+func Test_CalcDistanceBetween(t *testing.T) {
 
-		recs := Find(ctx, ".*")
-		assert.Equal(t, 0, len(recs))
-	}
-
-	// Three records
-	{
-		retGetErr = nil
-		retGetRecords = map[string]ikvdb.Record{}
-		retGetRecords["k1"] = ikvdb.NewRecord("2018-01-01")
-		retGetRecords["k2"] = ikvdb.NewRecord("2018-02-02")
-		retGetRecords["k3"] = ikvdb.NewRecord("2019-02-01")
-
-		recs := Find(ctx, "01-01*")
-		assert.Equal(t, 1, len(recs))
-		assert.Equal(t, "2018-01-01", recs["k1"].Value)
-
-		recs = Find(ctx, "-02")
-		assert.Equal(t, 2, len(recs))
-		assert.Equal(t, "2018-02-02", recs["k2"].Value)
-		assert.Equal(t, "2019-02-01", recs["k3"].Value)
-
-		recs = Find(ctx, "02$")
-		assert.Equal(t, 1, len(recs))
-		assert.Equal(t, "2018-02-02", recs["k2"].Value)
-
-	}
+	checkFirstDistanceLess(t, "nme?", "What is your name", "Where do you live")
+	checkFirstDistanceLess(t, "Now about TV", "How much does that TV cost", "What is your name")
 
 }

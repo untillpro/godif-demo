@@ -14,8 +14,8 @@ import (
 )
 
 func checkFirstDistanceLess(t *testing.T, q, a1, a2 string) {
-	d1 := CalcDistanceBetween(q, a1)
-	d2 := CalcDistanceBetween(q, a2)
+	d1 := MatchAnswer(q, a1)
+	d2 := MatchAnswer(q, a2)
 	assert.True(t, d1 < d2, "%v, %v, %v: %d %d", q, a1, a2, d1, d2)
 }
 
@@ -23,5 +23,6 @@ func Test_CalcDistanceBetween(t *testing.T) {
 
 	checkFirstDistanceLess(t, "nme?", "What is your name", "Where do you live")
 	checkFirstDistanceLess(t, "Now about TV", "How much does that TV cost", "What is your name")
+	checkFirstDistanceLess(t, "Any ideas TV prce", "What you think about TV price", "What you think about car price")
 
 }

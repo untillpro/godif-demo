@@ -17,9 +17,9 @@ import (
 	"context"
 	"testing"
 
+	"github.com/stretchr/testify/require"
 	"github.com/untillpro/godif"
 	"github.com/untillpro/godif-demo/ikvdb"
-	"github.com/stretchr/testify/require"
 	"github.com/untillpro/godif/services"
 )
 
@@ -29,18 +29,18 @@ func Test_Service(t *testing.T) {
 	require.Nil(t, err, err)
 }
 
+// Return values for `get`
 var retGetRecords map[string]ikvdb.Record
 var retGetErr error
 
-func get(ctx context.Context, key string) (records map[string]ikvdb.Record, err error){
+func get(ctx context.Context, key string) (records map[string]ikvdb.Record, err error) {
 	return retGetRecords, retGetErr
 }
-
 
 func setUp(t *testing.T) (context.Context, error) {
 	Declare()
 	godif.Provide(&ikvdb.Get, get)
-	
+
 	return services.ResolveAndStart()
 }
 

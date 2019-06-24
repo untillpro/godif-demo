@@ -9,6 +9,7 @@ package iconfigfile
 
 import (
 	"context"
+	"os"
 )
 
 // Service s.e.
@@ -20,7 +21,8 @@ var service Service
 
 // Start service
 func (s *Service) Start(ctx context.Context) (context.Context, error) {
-	return ctx, nil
+	err := os.MkdirAll(s.configFolder, 0700)
+	return ctx, err
 }
 
 // Stop service

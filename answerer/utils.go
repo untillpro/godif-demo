@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-package finder
+package answerer
 
 import "strings"
 
@@ -45,6 +45,7 @@ func PopularQuestions() map[string]string {
 	res["Can you help me"] = "It depends"
 	res["Which languages do you speak"] = "Only English, please"
 	res["How are you"] = "Not bad, thanks"
+	res["Hi"] = "Hello!"
 	res["What time is it"] = "Who notes, in happiness, how time is flying?"
 	res["What are your hobbies"] = "I like robots, computers, and answering"
 	res["What do you look like"] = "Like an 18 year old student"

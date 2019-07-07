@@ -14,12 +14,16 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 	"path"
+	"sync"
 
 	"github.com/untillpro/godif"
+	"github.com/untillpro/godif-demo/answerer"
 	"github.com/untillpro/godif-demo/iconfig"
 	"github.com/untillpro/godif-demo/iconfigfile"
+	"github.com/untillpro/godif-demo/ikvdb"
+	"github.com/untillpro/godif-demo/ikvdbbbolt"
+	"github.com/untillpro/godif-demo/ikvdbmem"
 	"github.com/untillpro/godif/services"
 )
 
@@ -28,17 +32,31 @@ func main() {
 	// Parse command line
 
 	pInMem := flag.Bool("m", false, "Use in-memory key-value database")
+	pVerbose := flag.Bool("v", false, "Use verbose output")
 	flag.Parse()
 
-	// Disable logging in services
-	services.DisableLogging()
-
 	// Declare others
+	{
 
-	iconfigfile.Declare(path.Join(".", ".configs"))
-	Declare(*pInMem, "ui")
+		iconfigfile.Declare(path.Join(".", ".data"))
+
+		// Declare ikvdb implementation depending on `-m` option
+		if *pInMem {
+			ikvdbmem.Declare()
+		} else {
+			ikvdbbbolt.Declare(path.Join(".data", "answers.db"))
+		}
+
+		answerer.Declare()
+
+		Declare(*pInMem, "ui")
+	}
 
 	// Run
+
+	if !(*pVerbose) {
+		services.DisableLogging()
+	}
 	err := services.Run()
 
 	if err != nil {
@@ -53,6 +71,8 @@ func Declare(inMem bool, configName string) {
 	godif.Require(&iconfig.GetConfig)
 	godif.Require(&iconfig.PutConfig)
 
+	godif.Require(&ikvdb.Put)
+
 	godif.ProvideSliceElement(&services.Services, &service{inMem: inMem, configName: configName})
 
 }
@@ -60,14 +80,18 @@ func Declare(inMem bool, configName string) {
 type service struct {
 	inMem      bool
 	configName string
+	wg         sync.WaitGroup
 }
 
 func ui(ctx context.Context, s *service) {
+	defer s.wg.Done()
+
+	// Reset config, if needed
 
 	config := map[string]string{"ResetMe": "1"}
 	iconfig.GetConfig(ctx, s.configName, &config)
 	if config["ResetMe"] == "1" {
-		config = map[string]string{"Prompt": "Your question: ", "ResetMe": "0"}
+		config = map[string]string{"Prompt": "Your question: ", "Correct": "Enter correct answer: ", "ResetMe": "0"}
 		iconfig.PutConfig(ctx, s.configName, config)
 	}
 
@@ -87,25 +111,52 @@ func ui(ctx context.Context, s *service) {
 	fmt.Println("--------------")
 	fmt.Println("")
 
+	var prevQuestion string
+	var wrong bool
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print(config["Prompt"])
 		if !scanner.Scan() {
 			break
 		}
-		text := scanner.Text()
-		if strings.Compare("hi", text) == 0 {
-			fmt.Println("hello, Yourself")
+		question := scanner.Text()
+		wrong = len(prevQuestion) > 0 && question == "wrong"
+		if wrong {
+			fmt.Print(config["Correct"])
+			if !scanner.Scan() {
+				break
+			}
+			answer := scanner.Text()
+			if len(answer) == 0 {
+				continue
+			}
+			ikvdb.Put(ctx, prevQuestion, answer)
+		} else {
+			answer := answerer.Answer(ctx, question)
+			fmt.Println(answer)
+			prevQuestion = question
 		}
 	}
 }
 
 func (s *service) Start(ctx context.Context) (context.Context, error) {
+
+	initDb(ctx)
+
+	s.wg.Add(1)
 	go ui(ctx, s)
 	return ctx, nil
 }
 
 func (s *service) Stop(ctx context.Context) {
+	os.Stdin.Close()
+	s.wg.Wait()
 	fmt.Println("")
-	fmt.Println("Bye, see you later")
+	fmt.Println("Bye, see you later!")
+}
+
+func initDb(ctx context.Context) {
+	for key, value := range answerer.PopularQuestions() {
+		ikvdb.Put(ctx, key, value)
+	}
 }

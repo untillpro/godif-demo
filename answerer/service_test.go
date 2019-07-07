@@ -11,7 +11,7 @@
 
 */
 
-package finder
+package answerer
 
 import (
 	"context"

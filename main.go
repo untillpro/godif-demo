@@ -21,6 +21,7 @@ import (
 	"github.com/untillpro/godif-demo/answerer"
 	"github.com/untillpro/godif-demo/iconfig"
 	"github.com/untillpro/godif-demo/iconfigfile"
+	"github.com/untillpro/godif-demo/iconfigmem"
 	"github.com/untillpro/godif-demo/ikvdb"
 	"github.com/untillpro/godif-demo/ikvdbbbolt"
 	"github.com/untillpro/godif-demo/ikvdbmem"
@@ -38,12 +39,12 @@ func main() {
 	// Declare others
 	{
 
-		iconfigfile.Declare(path.Join(".", ".data"))
-
 		// Declare ikvdb implementation depending on `-m` option
 		if *pInMem {
 			ikvdbmem.Declare()
+			iconfigmem.Declare()
 		} else {
+			iconfigfile.Declare(path.Join(".", ".data"))
 			ikvdbbbolt.Declare(path.Join(".data", "answers.db"))
 		}
 
@@ -54,9 +55,7 @@ func main() {
 
 	// Run
 
-	if !(*pVerbose) {
-		services.DisableLogging()
-	}
+	services.SetVerbose(*pVerbose)
 	err := services.Run()
 
 	if err != nil {

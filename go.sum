@@ -14,5 +14,6 @@ github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/untillpro/gochips v1.9.0 h1:RpvKppiix6uzKSVBBQNlrD17dk7QCtVLw3EBNDOH5DI=
 github.com/untillpro/gochips v1.9.0/go.mod h1:us8QSJtQx+8SiWFqh2oAT7UMzhF73t21p3WFGn6Apao=
+github.com/untillpro/gochips v1.10.0/go.mod h1:us8QSJtQx+8SiWFqh2oAT7UMzhF73t21p3WFGn6Apao=
 github.com/untillpro/godif v0.10.0 h1:Sa7WIB4+qSjSAHROO8e9W2rgx7/BF6jFWY3HJf2z3Bo=
 github.com/untillpro/godif v0.10.0/go.mod h1:v/TEwBrNu5MAS/1ylN50PikeZvPyMKjj8SeODKqIbpw=

@@ -13,44 +13,49 @@ import "strings"
 const Dimensions = 255
 
 // StringSimilarity calculates if s1 can be made of s2
-// s2 can be sginifically longer, than s1
+// s2 can be significally longer, than s1
 // Not commutative, of course
 func StringSimilarity(s1, s2 string) int {
 	coords1 := CalcStringCoords(s1)
 	coords2 := CalcStringCoords(s2)
 
 	sum := 0
-	unmatched := 0
+	unmatchedFromS2 := 0
+	unmatchedFromS1 := 0
 	for i, c1 := range coords1 {
 		c2 := coords2[i]
 		if c1 > 0 && c2 < c1 {
 			sum += (c1 - c2) * (c1 - c2)
 		}
 		if c1 == 0 && c2 > 0 {
-			unmatched++
+			unmatchedFromS2++
+		}
+		if c1 > 0 && c2 == 0 {
+			unmatchedFromS1++
 		}
 	}
 
-	// Small penalty for unmatched characters
-	return sum + unmatched/2
+	// Add small penalty for unmatched characters
+	return sum + unmatchedFromS2/2 + unmatchedFromS1
 }
 
 // PopularQuestions returns popular questions and their answers
 func PopularQuestions() map[string]string {
-	res := map[string]string{}
-	res["Are you real"] = "Yes I am a real computer program"
-	res["What is your name"] = "My name is unknown so far"
-	res["How old are you"] = "I was born in 2019"
-	res["Where do you live"] = "I'm living in computer"
-	res["Can you help me"] = "It depends"
-	res["Which languages do you speak"] = "Only English, please"
-	res["How are you"] = "Not bad, thanks"
-	res["Hi"] = "Hello!"
-	res["What time is it"] = "Who notes, in happiness, how time is flying?"
-	res["What are your hobbies"] = "I like robots, computers, and answering"
-	res["What do you look like"] = "Like an 18 year old student"
-	res["Are you human"] = "Not quite sure"
-	res["Why"] = "What `why`?"
+	res := map[string]string{
+		"Are you human":                "Not quite sure, seems not",
+		"Are you real":                 "Yes I am a real computer program",
+		"Can you help me":              "May be I can help, but it depends",
+		"Hi":                           "Hello!",
+		"How are you":                  "Not bad, thanks",
+		"How old are you":              "I was born in 2019",
+		"What is your name":            "My name is unknown so far",
+		"Where do you live":            "I'm living in computer",
+		"Which languages do you speak": "Only English, please",
+		"What time is it":              "Who notes, in happiness, how time is flying?",
+		"What are your hobbies":        "I like robots, computers, and answering",
+		"What do you look like":        "Like an 18 year old student",
+		"Why":                          "What `why`?",
+	}
 	return res
 }
 

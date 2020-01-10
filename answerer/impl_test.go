@@ -22,8 +22,8 @@ func Test_BasicUsage(t *testing.T) {
 
 	// Empty db
 	{
-		retGetErr = nil
-		retGetRecords = map[string]ikvdb.Record{}
+		mockGetErr = nil
+		mockGetRecords = map[string]ikvdb.Record{}
 
 		answer := Answer(ctx, "")
 		assert.Equal(t, 0, len(answer))
@@ -31,12 +31,12 @@ func Test_BasicUsage(t *testing.T) {
 
 	// PopularQuestions
 	{
-		retGetErr = nil
-		retGetRecords = map[string]ikvdb.Record{}
+		mockGetErr = nil
+		mockGetRecords = map[string]ikvdb.Record{}
 
 		// Emulate Get results
 		for q, a := range PopularQuestions() {
-			retGetRecords[q] = ikvdb.NewRecord(a)
+			mockGetRecords[q] = ikvdb.NewRecord(a)
 		}
 
 		assert.Equal(t, "Not bad, thanks", Answer(ctx, "How are you"))
@@ -55,16 +55,15 @@ func Test_PopularQuestions(t *testing.T) {
 
 	// All answers must match
 
-	retGetErr = nil
-	retGetRecords = map[string]ikvdb.Record{}
+	mockGetErr = nil
+	mockGetRecords = map[string]ikvdb.Record{}
 
 	// Emulate Get results
 	for q, a := range PopularQuestions() {
-		retGetRecords[q] = ikvdb.NewRecord(a)
+		mockGetRecords[q] = ikvdb.NewRecord(a)
 	}
 
 	for q, a := range PopularQuestions() {
 		assert.Equal(t, a, Answer(ctx, q))
 	}
-
 }

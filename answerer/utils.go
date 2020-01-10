@@ -42,7 +42,7 @@ func StringSimilarity(s1, s2 string) int {
 // PopularQuestions returns popular questions and their answers
 func PopularQuestions() map[string]string {
 	res := map[string]string{
-		"Are you human":                "Not quite sure, seems not",
+		"human":                        "Not quite sure, seems not",
 		"Are you real":                 "Yes I am a real computer program",
 		"Can you help me":              "May be I can help, but it depends",
 		"Hi":                           "Hello!",
@@ -55,6 +55,7 @@ func PopularQuestions() map[string]string {
 		"What are your hobbies":        "I like robots, computers, and answering",
 		"What do you look like":        "Like an 18 year old student",
 		"Why":                          "What `why`?",
+		" ":                            "Please enter something",
 	}
 	return res
 }

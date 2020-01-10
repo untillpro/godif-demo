@@ -32,3 +32,8 @@ func Answer(ctx context.Context, question string) string {
 	}
 	return best
 }
+
+// Correct question
+func Correct(ctx context.Context, question, answer string) {
+	ikvdb.Put(ctx, question, answer)
+}

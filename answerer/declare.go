@@ -10,9 +10,11 @@ package answerer
 import (
 	"github.com/untillpro/godif"
 	"github.com/untillpro/godif-demo/ikvdb"
+	"github.com/untillpro/godif/services"
 )
 
 // Declare s.e.
 func Declare() {
 	godif.Require(&ikvdb.Get)
+	godif.ProvideSliceElement(&services.Services, &service{})
 }

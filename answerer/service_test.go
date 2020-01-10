@@ -29,18 +29,17 @@ func Test_Service(t *testing.T) {
 	require.Nil(t, err, err)
 }
 
-// Return values for `get`
-var retGetRecords map[string]ikvdb.Record
-var retGetErr error
+// Return values for `mockGet`
+var mockGetRecords map[string]ikvdb.Record
+var mockGetErr error
 
-func get(ctx context.Context, key string) (records map[string]ikvdb.Record, err error) {
-	return retGetRecords, retGetErr
+func mockGet(ctx context.Context, key string) (records map[string]ikvdb.Record, err error) {
+	return mockGetRecords, mockGetErr
 }
 
 func setUp(t *testing.T) (context.Context, error) {
 	Declare()
-	godif.Provide(&ikvdb.Get, get)
-
+	godif.Provide(&ikvdb.Get, mockGet)
 	return services.ResolveAndStart()
 }
 
